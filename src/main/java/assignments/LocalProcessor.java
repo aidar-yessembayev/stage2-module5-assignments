@@ -29,7 +29,8 @@ public class LocalProcessor {
         this.processorVersion = processorVersion;
         this.valueOfCheap = valueOfCheap;
         this.informationScanner = informationScanner;
-        this.stringArrayList = stringArrayList;
+        // Remove this assignment of "stringArrayList".
+        this.stringArrayList = new LinkedList<>(stringArrayList);
     }
 
     public LocalProcessor() {
@@ -39,13 +40,13 @@ public class LocalProcessor {
     @ListIteratorAnnotation
     public void listIterator(LinkedList<String> stringList) {
         for (String name : stringList) {
-            System.out.println(name.hashCode());
+            System.err.println(name.hashCode());
         }
     }
 
     @FullNameProcessorGeneratorAnnotation
     public String fullNameProcessorGenerator(LinkedList<String> stringList) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (String name: stringList) {
             result.append(name + " ");
         }
@@ -58,15 +59,17 @@ public class LocalProcessor {
     public void readFullProcessorName(File file) {
         try {
             informationScanner = new Scanner(file);
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
 
             while (informationScanner.hasNext()) {
                 result.append(informationScanner.nextLine());
             }
 
             processorVersion = result.toString();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+
         } finally {
             if (informationScanner != null) {
                 informationScanner.close();
