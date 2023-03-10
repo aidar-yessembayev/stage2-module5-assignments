@@ -2,7 +2,6 @@ package assignments;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,33 +22,41 @@ public class LocalProcessor {
     static List<String> stringArrayList;
 
     public LocalProcessor(String processorName, Long period, String processorVersion, Integer valueOfCheap,
-                          Scanner informationScanner, LinkedList<String> stringArrayList) {
+                          Scanner informationScanner, List<String> stringArrayList) {
         this.processorName = processorName;
         this.period = period;
         this.processorVersion = processorVersion;
         this.valueOfCheap = valueOfCheap;
         this.informationScanner = informationScanner;
-        // Remove this assignment of "stringArrayList".
-        this.stringArrayList = new LinkedList<>(stringArrayList);
+        this.stringArrayList = stringArrayList;
     }
 
     public LocalProcessor() {
     }
 
-    // ne nujno sozdavat'
     @ListIteratorAnnotation
-    public void listIterator(LinkedList<String> stringList) {
-        for (String name : stringList) {
-            System.err.println(name.hashCode());
+    public void listIterator(List<String> stringList) {
+        try {
+            for (String name : stringList) {
+                System.out.println(name.hashCode());
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
     @FullNameProcessorGeneratorAnnotation
-    public String fullNameProcessorGenerator(LinkedList<String> stringList) {
+    public String fullNameProcessorGenerator(List<String> stringList) {
         StringBuilder result = new StringBuilder();
-        for (String name: stringList) {
-            result.append(name + " ");
+
+        try {
+            for (String name: stringList) {
+                result.append(name + " ");
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
+
 
         processorName = result.toString();
         return processorName;
@@ -76,4 +83,17 @@ public class LocalProcessor {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+
+        if (!(obj instanceof LocalProcessor)) {
+            return false;
+        }
+
+        LocalProcessor lObj = (LocalProcessor) obj;
+        return lObj.processorName.equals(processorName);
+    }
+
 }
